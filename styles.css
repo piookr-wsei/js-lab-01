@@ -1,0 +1,10 @@
+.button-main{
+    padding: 10px;
+    outline: none;
+    border-radius: 10%;
+    font-weight: 700;
+}
+
+body{
+    padding: 20px;
+}

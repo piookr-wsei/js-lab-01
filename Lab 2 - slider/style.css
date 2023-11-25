@@ -1,22 +1,26 @@
+/* css code */
 #slider {
     width: 600px;
     height: 400px;
     margin: 100px auto 0 auto;
     overflow: hidden;
-}
-#slider .slides {
+    border: 1px solid;
+    border-color: red;
+  }
+  #slider .slides {
     display: flex;
-    animation-name: pociag-w-lewo;
-    animation-duration: 4s;
-    animation-delay: 1s;
-    animation-timing-function: ease-in-out;
-}
+    transition: transform 1s ease-in-out;
+  }
 
-@keyframes pociag-w-lewo {
-    0% {
-        transform: translateX(0);
-    }
-    100% {
-        transform: translateX(-2000px);
-    }
-}
+  #slider-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  #buttons-wrapper {
+    display: flex;
+    width: 100%;
+    gap: 5px;
+    place-content: center;
+  }

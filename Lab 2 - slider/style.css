@@ -4,6 +4,7 @@
     height: 400px;
     margin: 100px auto 0 auto;
     overflow: hidden;
+    position: relative;
     border: 1px solid;
     border-color: red;
   }
@@ -23,4 +24,51 @@
     width: 100%;
     gap: 5px;
     place-content: center;
+  }
+
+  .slide-panel {
+    position: relative;
+  }
+
+  .slide-panel-header {
+    font-weight: 700;
+    font-size: 36px;
+    color: white;
+    position: absolute;
+    left: 16px;
+    bottom: -10px;
+  }
+
+  #navigation {
+    position: absolute;
+    display: flex;
+    justify-content: space-between;
+    width: calc(100% - 16px);
+    padding: 8px;
+    top: 50%;
+    margin: auto;
+  }
+
+  #dots {
+    position: absolute;
+    display: flex;
+    gap: 4px;
+    width: calc(100% - 16px);
+    padding: 8px;
+    bottom: 8px;
+    margin: auto;
+    place-content: center;
+  }
+
+  .dot {
+    width: 12px;
+    height: 12px;
+    border: 2px solid;
+    border-color: white;
+    border-radius: 100%;
+    cursor: pointer;
+  }
+
+  .active {
+    background-color: white;
   }

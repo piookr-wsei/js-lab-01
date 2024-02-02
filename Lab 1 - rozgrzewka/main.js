@@ -1,42 +1,54 @@
-// notatnik z zajęć
 window.addEventListener("DOMContentLoaded", (event) => {
-const liczba1 = document.querySelector('#liczba1')
-const btnPrzelicz = document.querySelector('#przelicz')
-const btnCreate = document.querySelector("#createComponentButton")
-const wynikiPojemnik = document.querySelector('#wyniki')
+    const btnPrzelicz = document.querySelector('#przelicz')
+    const btnCreate = document.querySelector("#createComponentButton")
+    const wynikiPojemnik = document.querySelector('#wyniki')
+    const inputContainer = document.querySelector("#inputContainer")
 
-const inputContainer = document.querySelector("#inputContainer")
+    let arrayOfInputs = [createInputComponent(0), createInputComponent(1), createInputComponent(2)]
 
-const arrayOfInputs = [createInputComponent(0), createInputComponent(1), createInputComponent(1),]
-
-for (input of arrayOfInputs){
-    inputContainer.appendChild(input)
-}
-
-if(btnPrzelicz){
-
-    btnPrzelicz.addEventListener('click', () => {
-        wynikiPojemnik.innerHTML = liczba1.value
-        console.log(liczba1.value)
+    arrayOfInputs.forEach(input => {
+        inputContainer.appendChild(input)
     })
-}
 
-if(btnCreate){
-    btnCreate.addEventListener("click", () => {
-        inputContainer.appendChild(createInputComponent(arrayOfInputs.length))
-        //console.log(createInputComponent(0))
-    })
-}
+    const calculateSum = () => {
+        let sum = 0
+        arrayOfInputs.forEach((input, index) => {
+            const inputElement = document.querySelector(`#liczba${index}`)
+            if(inputElement) {
+                sum += parseFloat(inputElement.value) || 0
+            }
+        })
+        wynikiPojemnik.innerHTML = `Suma: ${sum}`
+    }
 
-function createInputComponent(index){
-    let template = `
-        <input type="text" id="liczba${index}" />
-        <button id="przelicz">Przelicz</button>`
+    if(btnPrzelicz){
+        btnPrzelicz.addEventListener('click', calculateSum)
+    }
 
-    let component = document.createElement('div')
+    if(btnCreate){
+        btnCreate.addEventListener("click", () => {
+            const newIndex = arrayOfInputs.length
+            const newInputComponent = createInputComponent(newIndex)
+            arrayOfInputs.push(newInputComponent)
+            inputContainer.appendChild(newInputComponent)
+        })
+    }
 
-    component.innerHTML = template
+    function createInputComponent(index){
+        let component = document.createElement('div')
+        component.setAttribute('id', `inputComponent${index}`)
+        let template = `
+            <input type="text" id="liczba${index}" />
+            <button class="remove" id="remove${index}">Usuń</button>`
 
-    return component
-}
+        component.innerHTML = template
+
+        component.querySelector(`#remove${index}`).addEventListener('click', () => {
+            document.querySelector(`#inputComponent${index}`).remove()
+            arrayOfInputs = arrayOfInputs.filter((_, i) => i !== index)
+            calculateSum()
+        })
+
+        return component
+    }
 })

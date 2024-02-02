@@ -35,7 +35,7 @@
             const loadNotes = () => {
                 const notes = JSON.parse(localStorage.getItem("notes") || "[]");
                 notesContainer.innerHTML = "";
-                // Sort notes to pin the pinned ones to the top
+                // Sort notes to keep the pinned ones at the top
                 notes.sort((a, b) => b.pin - a.pin);
                 notes.forEach((note, index) => {
                     const noteElement = document.createElement("div");

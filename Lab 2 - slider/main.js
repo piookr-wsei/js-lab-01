@@ -12,12 +12,53 @@ const slideCount = slides.childElementCount;
 let currentSlide = 0;
 let intervalId;
 
+function initialize() {
+  loopSlides()
+  btnFwd.addEventListener("click", () => {
+    startSlider(true)
+    console.log("forward")
+  })
+
+  btnRev.addEventListener("click", () => {
+    startSlider(false)
+    console.log("reverse")
+  })
+
+  btnPause.addEventListener("click", () => {
+    if (intervalId) {
+      pauseSlider()
+      btnPause.innerHTML = "Start"
+      console.log("paused")
+    }
+    else {
+      startSlider(true)
+      btnPause.innerHTML = "Pause"
+      console.log("started")
+    }
+  })
+
+  btnPrev.addEventListener("click", () => {
+    moveSlides(true)
+    console.log("previous")
+  })
+  
+  btnNext.addEventListener("click", () => {
+    moveSlides(false)
+    console.log("next")
+  })
+
+  createDots();
+  updateActiveDot();
+}
+
+window.addEventListener('load', initialize);
+
 function nextSlide(){
-    moveSlides(true);
+  moveSlides(true);
 }
 
 function prevSlide(){
-    moveSlides(false);
+  moveSlides(false);
 }
 
 function moveSlides(next = true) {
@@ -41,79 +82,38 @@ function loopSlides() {
   intervalId = setInterval(moveSlides, 4000);
 }
 
-function initialize() {
-    loopSlides()
-    btnFwd.addEventListener("click", () => {
-        startSlider(true)
-        console.log("forward")
-    })
-
-    btnRev.addEventListener("click", () => {
-        startSlider(false)
-        console.log("reverse")
-    })
-
-    btnPause.addEventListener("click", () => {
-        if (intervalId) {
-            pauseSlider()
-            btnPause.innerHTML = "Start"
-            console.log("paused")
-        }
-        else {
-            startSlider(true)
-            btnPause.innerHTML = "Pause"
-            console.log("started")
-        }
-    })
-
-    btnPrev.addEventListener("click", () => {
-        moveSlides(true)
-        console.log("previous")
-    })
-    
-    btnNext.addEventListener("click", () => {
-        moveSlides(false)
-        console.log("next")
-    })
-
-    createDots();
-    updateActiveDot();
-}
-
-window.addEventListener('load', initialize);
-
 function pauseSlider(){
-    clearInterval(intervalId);
-    intervalId = undefined;
+  clearInterval(intervalId);
+  intervalId = undefined;
 }
 
 function startSlider(increasing = true) {
-    if (intervalId) {
-        pauseSlider()
-    }
-    intervalId = setInterval(moveSlides, 4000, increasing);
+  if (intervalId) {
+    pauseSlider()
+  }
+  intervalId = setInterval(moveSlides, 4000, increasing);
 }
 
 function createDots() {
-    for (let i = 0; i < slideCount; i++) {
-      let dot = document.createElement('span');
-      dot.className = 'dot';
+  for (let i = 0; i < slideCount; i++) {
+    let dot = document.createElement('span');
+    dot.className = 'dot';
 
-      dot.addEventListener('click', function() {
-        currentSlide = i - 1;
-        moveSlides();
-      });
+    dot.addEventListener('click', function() {
+      currentSlide = i - 1;
+      moveSlides();
+    });
 
-      dots.appendChild(dot);
-    }
+    dots.appendChild(dot);
   }
+}
   
-  function updateActiveDot() {
-    let dotElements = document.querySelectorAll('.dot');
+function updateActiveDot() {
+  let dotElements = document.querySelectorAll('.dot');
 
-    for (let dot of dotElements) {
-      dot.classList.remove('active');
-    }
-
-    dotElements[currentSlide].classList.add('active');
+  for (let dot of dotElements) {
+    dot.classList.remove('active');
   }
+
+  dotElements[currentSlide].classList.add('active');
+}

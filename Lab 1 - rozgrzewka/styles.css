@@ -1,3 +1,36 @@
+:root {
+    --blue-color: #007bff;
+}
+
+body {
+    padding: 20px;
+    background: black;
+    color: white;
+}
+
+input {
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    background-color: rgb(26, 30, 32);
+    outline: none;
+    border: 1px solid rgba(255, 255, 255, 0.158);
+
+    &:active, &:focus {
+        border-color: var(--blue-color);
+    }
+}
+
+button {
+    color: white;
+    background-color: var(--blue-color);
+    border-radius: 6px;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+}
+
 .button-main{
     padding: 10px;
     outline: none;
@@ -5,6 +38,15 @@
     font-weight: 700;
 }
 
-body{
-    padding: 20px;
+
+#inputContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#wyniki {
+    font-size: 20px;
+    font-weight: 600;
+    padding: 15px;
 }

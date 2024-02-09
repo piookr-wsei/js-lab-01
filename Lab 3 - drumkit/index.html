@@ -2,12 +2,204 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Drum Kit</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        div {
+            margin: 10px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        button:active {
+            transform: scale(0.98);
+            opacity: 0.8;
+        }
+        .metronome-bpm {
+            padding: 5px;
+            margin-left: 5px;
+            width: 60px;
+        }
+        label {
+            margin-left: 10px;
+        }
+        input[type="checkbox"] {
+            margin-right: 5px;
+        }
+    </style>
 </head>
 <body>
-    <audio src="./sounds/clap.wav" controls id="s1"></audio>
-    <audio src="./sounds/hihat.wav" controls id="s2"></audio>
-    <script src="drumkit.js"></script>
-</body> 
+    <!-- Przyciski do nagrywania kanałów -->
+    <div>
+        <button class="record" data-channel="0">Record 1</button>
+        <button class="record" data-channel="1">Record 2</button>
+        <button class="record" data-channel="2">Record 3</button>
+        <button class="record" data-channel="3">Record 4</button>
+    </div>
+    <!-- Przyciski do odtwarzania kanałów -->
+    <div>
+        <button class="play" data-channel="0">Play 1</button>
+        <button class="play" data-channel="1">Play 2</button>
+        <button class="play" data-channel="2">Play 3</button>
+        <button class="play" data-channel="3">Play 4</button>
+    </div>
+    <!-- Checkboxy do wyboru kanałów -->
+    <div>
+        <input type="checkbox" id="channel0" checked>
+        <label for="channel0">Channel 1</label>
+        <input type="checkbox" id="channel1" checked>
+        <label for="channel1">Channel 2</label>
+        <input type="checkbox" id="channel2" checked>
+        <label for="channel2">Channel 3</label>
+        <input type="checkbox" id="channel3" checked>
+        <label for="channel3">Channel 4</label>
+    </div>
+    <!-- Przycisk do odtwarzania wybranych kanałów -->
+    <button class="play-selected">Play Selected</button>
+    <!-- Kontrolki metronomu -->
+    <div>
+        <button class="metronome-toggle">Toggle Metronome</button>
+        <input type="number" class="metronome-bpm" value="120">
+        <label for="metronome-bpm">BPM</label>
+    </div>
+    <!-- Przyciski dźwięków -->
+    <div class="sound-buttons">
+        <button class="sound" data-key="a">Clap (a)</button>
+        <button class="sound" data-key="s">Hihat (s)</button>
+        <button class="sound" data-key="d">Kick (d)</button>
+        <button class="sound" data-key="f">Openhat (f)</button>
+        <button class="sound" data-key="g">Boom (g)</button>
+        <button class="sound" data-key="h">Ride (h)</button>
+        <button class="sound" data-key="j">Snare (j)</button>
+        <button class="sound" data-key="k">Tom (k)</button>
+        <button class="sound" data-key="l">Tink (l)</button>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sounds = {
+                'a': 'sounds/clap.wav',
+                's': 'sounds/hihat.wav',
+                'd': 'sounds/kick.wav',
+                'f': 'sounds/openhat.wav',
+                'g': 'sounds/boom.wav',
+                'h': 'sounds/ride.wav',
+                'j': 'sounds/snare.wav',
+                'k': 'sounds/tom.wav',
+                'l': 'sounds/tink.wav',
+                'metronome': 'sounds/hihat.wav'
+            };
+
+            const channels = [[], [], [], []];
+            let isRecording = [false, false, false, false];
+            let startTime = [0, 0, 0, 0];
+            let metronomeInterval = null;
+
+            document.addEventListener('keydown', (e) => {
+                if (sounds[e.key]) {
+                    const audio = new Audio(sounds[e.key]);
+                    audio.play();
+                    const button = document.querySelector(`.sound[data-key="${e.key}"]`);
+                    button.classList.add('active');
+                    setTimeout(() => button.classList.remove('active'), 200);
+
+                    channels.forEach((channel, index) => {
+                        if (isRecording[index]) {
+                            const time = Date.now() - startTime[index];
+                            channel.push({ key: e.key, time });
+                        }
+                    });
+                }
+            });
+
+            const recordButtons = document.querySelectorAll('.record');
+            recordButtons.forEach((button, index) => {
+                button.addEventListener('click', () => {
+                    isRecording[index] = true;
+                    channels[index] = [];
+                    startTime[index] = Date.now();
+                });
+            });
+
+            const playButtons = document.querySelectorAll('.play');
+            playButtons.forEach((button, index) => {
+                button.addEventListener('click', () => {
+                    channels[index].forEach(note => {
+                        setTimeout(() => {
+                            const audio = new Audio(sounds[note.key]);
+                            audio.play();
+                        }, note.time);
+                    });
+                });
+            });
+
+            // Odtwarzanie wybranych kanałów
+            document.querySelector('.play-selected').addEventListener('click', () => {
+                const selectedChannels = getSelectedChannels();
+                selectedChannels.forEach(index => {
+                    channels[index].forEach(note => {
+                        setTimeout(() => {
+                            const audio = new Audio(sounds[note.key]);
+                            audio.play();
+                        }, note.time);
+                    });
+                });
+            });
+
+            // Przełączanie metronomu
+            document.querySelector('.metronome-toggle').addEventListener('click', () => {
+                if (metronomeInterval) {
+                    clearInterval(metronomeInterval);
+                    metronomeInterval = null;
+                } else {
+                    const bpm = parseInt(document.querySelector('.metronome-bpm').value, 10);
+                    const intervalTime = 60000 / bpm;
+                    metronomeInterval = setInterval(() => {
+                        const audio = new Audio(sounds['metronome']);
+                        audio.play();
+                    }, intervalTime);
+                }
+            });
+
+            // Odtwarzanie dźwięków
+            document.querySelectorAll('.sound').forEach(button => {
+                button.addEventListener('click', function() {
+                    const key = this.getAttribute('data-key');
+                    const audio = new Audio(sounds[key]);
+                    audio.play();
+                    button.classList.add('active');
+                    setTimeout(() => button.classList.remove('active'), 200);
+                });
+            });
+        });
+
+        // Funkcja do pobierania indeksów wybranych kanałów
+        function getSelectedChannels() {
+            const selectedChannels = [];
+            ['channel0', 'channel1', 'channel2', 'channel3'].forEach((id, index) => {
+                if (document.getElementById(id).checked) {
+                    selectedChannels.push(index);
+                }
+            });
+            return selectedChannels;
+        }
+    </script>
+</body>
 </html>

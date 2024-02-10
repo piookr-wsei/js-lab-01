@@ -53,6 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
       this.x += this.vx;
       this.y += this.vy;
 
+      // Odbijanie od ścian
       if (this.x + this.radius > canvas.width || this.x - this.radius < 0) {
         this.vx *= -1;
       }
@@ -64,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const dy = this.y - mouseY;
       const distance = Math.sqrt(dx * dx + dy * dy);
 
-      // Zmiana kierunku ruchu
+      // Odpychanie od kursora
       if (distance < 150) { 
         this.vx += mouseForce * dx / distance;
         this.vy += mouseForce * dy / distance;

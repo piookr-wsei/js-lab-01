@@ -12,14 +12,14 @@ document.addEventListener('DOMContentLoaded', () => {
     fetch(url)
         .then(response => response.json())
         .then(data => {
-        const weather = {
-        location: data.name,
-        temperature: data.main.temp,
-        humidity: data.main.humidity,
-        icon: `http://openweathermap.org/img/w/${data.weather[0].icon}.png`,
-        };
-        displayWeather(weather);
-        saveLocation(location);
+          const weather = {
+            location: data.name,
+            temperature: data.main.temp,
+            humidity: data.main.humidity,
+            icon: `http://openweathermap.org/img/w/${data.weather[0].icon}.png`,
+          };
+          displayWeather(weather);
+          saveLocation(location);
         })
         .catch(error => console.error('Error fetching weather:', error));
   }

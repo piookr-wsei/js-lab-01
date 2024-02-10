@@ -1,10 +1,10 @@
 const slider = document.querySelector('#slider');
 const slides = document.querySelector('.slides');
-const btnPause = document.querySelector('#btnPause')
-const btnFwd = document.querySelector('#btnFwd')
-const btnRev = document.querySelector('#btnRev')
-const btnPrev = document.querySelector('#btnPrev')
-const btnNext = document.querySelector('#btnNext')
+const btnPause = document.querySelector('#btnPause');
+const btnFwd = document.querySelector('#btnFwd');
+const btnRev = document.querySelector('#btnRev');
+const btnPrev = document.querySelector('#btnPrev');
+const btnNext = document.querySelector('#btnNext');
 const dots = document.querySelector('#dots');
 
 const slideWidth = slider.offsetWidth;
@@ -13,39 +13,39 @@ let currentSlide = 0;
 let intervalId;
 
 function initialize() {
-  loopSlides()
+  loopSlides();
   btnFwd.addEventListener("click", () => {
-    startSlider(true)
-    console.log("forward")
-  })
+    startSlider(true);
+    console.log("forward");
+  });
 
   btnRev.addEventListener("click", () => {
-    startSlider(false)
-    console.log("reverse")
-  })
+    startSlider(false);
+    console.log("reverse");
+  });
 
   btnPause.addEventListener("click", () => {
     if (intervalId) {
-      pauseSlider()
-      btnPause.innerHTML = "Start"
-      console.log("paused")
+      pauseSlider();
+      btnPause.innerHTML = "Start";
+      console.log("paused");
     }
     else {
-      startSlider(true)
-      btnPause.innerHTML = "Pause"
-      console.log("started")
+      startSlider(true);
+      btnPause.innerHTML = "Pause";
+      console.log("started");
     }
-  })
+  });
 
   btnPrev.addEventListener("click", () => {
-    moveSlides(true)
-    console.log("previous")
-  })
+    moveSlides(true);
+    console.log("previous");
+  });
   
   btnNext.addEventListener("click", () => {
-    moveSlides(false)
-    console.log("next")
-  })
+    moveSlides(false);
+    console.log("next");
+  });
 
   createDots();
   updateActiveDot();
@@ -89,7 +89,7 @@ function pauseSlider(){
 
 function startSlider(increasing = true) {
   if (intervalId) {
-    pauseSlider()
+    pauseSlider();
   }
   intervalId = setInterval(moveSlides, 4000, increasing);
 }
